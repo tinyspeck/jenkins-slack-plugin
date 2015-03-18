@@ -60,7 +60,7 @@ public class ActiveNotifier implements FineGrainedNotifier {
         AbstractProject<?, ?> project = r.getProject();
         SlackNotifier.SlackJobProperty jobProperty = project.getProperty(SlackNotifier.SlackJobProperty.class);
         Result result = r.getResult();
-        AbstractBuild<?, ?> previousBuild = project.getLastBuild().getPreviousBuild();
+        AbstractBuild<?, ?> previousBuild = project.getLastBuild().getPreviousCompletedBuild();
         Result previousResult = (previousBuild != null) ? previousBuild.getResult() : Result.SUCCESS;
         if ((result == Result.ABORTED && jobProperty.getNotifyAborted())
                 || (result == Result.FAILURE && jobProperty.getNotifyFailure())
@@ -143,7 +143,7 @@ public class ActiveNotifier implements FineGrainedNotifier {
                 return "Starting...";
             }
             Result result = r.getResult();
-            Run previousBuild = r.getProject().getLastBuild().getPreviousBuild();
+            Run previousBuild = r.getProject().getLastBuild().getPreviousCompletedBuild();
             Result previousResult = (previousBuild != null) ? previousBuild.getResult() : Result.SUCCESS;
             if (result == Result.SUCCESS && previousResult == Result.FAILURE) return "Back to normal";
             if (result == Result.SUCCESS) return "Success";
